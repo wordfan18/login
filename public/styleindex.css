@@ -1,0 +1,174 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    animation: background-animation 10s ease infinite;
+    overflow: hidden;
+}
+
+@keyframes background-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Container Styles */
+.container {
+    text-align: center;
+    background: #ffffff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    width: 320px;
+    animation: fade-in 1s ease-out, scale-up 0.5s ease-out forwards;
+    z-index: 1; /* Tetap di atas animasi bintang */
+    position: relative;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-up {
+    from { transform: scale(0.9); }
+    to { transform: scale(1); }
+}
+
+/* Form Styles */
+h2 {
+    margin-bottom: 20px;
+    color: #333333;
+    font-size: 22px;
+    animation: fade-in-text 1s ease-out;
+}
+
+@keyframes fade-in-text {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form {
+    width: 100%;
+}
+
+.input-group {
+    position: relative;
+    margin: 15px 0;
+    width: 100%;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #cccccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #2575fc;
+    background-color: #f0f8ff;
+    transform: translateY(-4px);
+}
+
+.input-group input:valid {
+    border-color: #34c759;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    background: #ffffff;
+    padding: 0 5px;
+    color: #aaaaaa;
+    font-size: 14px;
+    transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -8px;
+    font-size: 12px;
+    color: #2575fc;
+}
+
+/* Button Styles */
+button {
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    color: #ffffff;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    margin: 10px 0;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    transform: translateY(-3px);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Hidden Class */
+.hidden {
+    display: none;
+    animation: fade-out 1s ease-out forwards;
+}
+
+@keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Star Animation Styles */
+.stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0; /* Pastikan animasi berada di belakang container */
+}
+
+.star {
+    position: absolute;
+    top: -10%;
+    left: calc(var(--start-x, 0) * 100%);
+    width: calc(2px + var(--size, 1) * 4px); /* Ukuran lebih besar */
+    height: calc(2px + var(--size, 1) * 4px); /* Ukuran lebih besar */
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: falling-star calc(var(--duration, 3) * 1s) linear infinite;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+    opacity: calc(0.6 + var(--size, 1) * 0.4);
+}
+
+@keyframes falling-star {
+    from {
+        transform: translateY(0) translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(120vh) translateX(calc(-20px + var(--offset-x, 0) * 40px));
+        opacity: 0;
+    }
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styledashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>Dashboard</h2>
+        <p id="welcomeMessage" class="welcome-message">Loading...</p>
+
+        <div class="menu-container">
+            <h3>Menu</h3>
+            <ul class="menu-list">
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#settings">Settings</a></li>
+                <li><a href="#reports">Reports</a></li>
+                <li><a href="#help">Help</a></li>
+            </ul>
+        </div>
+
+        <div class="content-container">
+            <section id="profile">
+                <h3>Profile</h3>
+                <p>This is the profile section where user details are displayed.</p>
+            </section>
+
+            <section id="settings">
+                <h3>Settings</h3>
+                <p>Adjust your preferences here.</p>
+            </section>
+
+            <section id="reports">
+                <h3>Reports</h3>
+                <p>View your reports and analytics here.</p>
+            </section>
+
+            <section id="help">
+                <h3>Help</h3>
+                <p>Find answers to common questions here.</p>
+            </section>
+        </div>
+
+        <button id="logoutButton">Logout</button>
+    </div>
+
+    <script>
+        // Get dashboard data from the server
+        fetch('/api/dashboard')
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Not authenticated');
+                }
+            })
+            .then(data => {
+                // Display welcome message with the logged-in user's name
+                const username = data.username || 'User';
+                document.getElementById('welcomeMessage').textContent = `Selamat datang, ${username}! Semoga harimu menyenangkan.`;
+            })
+            .catch(error => {
+                alert(error.message);
+                window.location.href = 'index.html';  // Redirect to login if not authenticated
+            });
+
+        // Logout and redirect to login page
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            fetch('/api/logout', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Logged out successfully!');
+                        localStorage.removeItem("token")
+                        window.location.href = 'index.html';  // Redirect to login page
+                    }
+                });
+        });
+    </script>
+</body>
+</html>

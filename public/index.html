@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Registration</title>
+    <link rel="stylesheet" href="styleindex.css">
+</head>
+<body>
+    <!-- Animasi bintang -->
+    <div class="stars"></div>
+
+    <!-- Kontainer Form -->
+    <div class="container">
+        <h2 id="formTitle">Login</h2>
+        
+        <!-- Login Form -->
+        <form id="loginForm" class="form">
+            <div class="input-group">
+                <input type="text" id="username" placeholder=" " required />
+                <label for="username">Username</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder=" " required />
+                <label for="password">Password</label>
+            </div>
+            <button type="button" onclick="login()">Login</button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" class="form hidden">
+            <div class="input-group">
+                <input type="text" id="newUsername" placeholder=" " required />
+                <label for="newUsername">New Username</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="newPassword" placeholder=" " required />
+                <label for="newPassword">New Password</label>
+            </div>
+            <button type="button" onclick="register()">Register</button>
+        </form>
+
+        <!-- Toggle Button -->
+        <button id="toggleFormButton" onclick="toggleForm()">Switch to Register</button>
+    </div>
+
+    <script>
+        // Fungsi untuk login
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+                .then(response => {
+                    if (response.ok) {
+
+                        return response.json();
+                    } else {
+                        throw new Error('Invalid credentials');
+                    }
+                })
+                .then(data => {
+                    console.log(data) 
+                    localStorage.setItem('token', data.token);
+                    window.location.href = 'dashboard.html';
+                    alert(data.message);
+                })
+                .catch(error => alert(error.message));
+        }
+
+        // Fungsi untuk registrasi
+        function register() {
+            const newUsername = document.getElementById('newUsername').value;
+            const newPassword = document.getElementById('newPassword').value;
+
+            fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: newUsername, password: newPassword })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Registration failed');
+                    }
+                })
+                .then(data => {
+                    alert(data.message);
+                    toggleForm(); // Kembali ke form login setelah registrasi berhasil
+                })
+                .catch(error => alert(error.message));
+        }
+
+        // Fungsi untuk mengganti tampilan antara login dan register
+        function toggleForm() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const formTitle = document.getElementById('formTitle');
+            const toggleButton = document.getElementById('toggleFormButton');
+
+            if (loginForm.classList.contains('hidden')) {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                formTitle.textContent = 'Login';
+                toggleButton.textContent = 'Switch to Register';
+            } else {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                formTitle.textContent = 'Register';
+                toggleButton.textContent = 'Switch to Login';
+            }
+        }
+
+        // Menambahkan animasi bintang
+        const starsContainer = document.querySelector('.stars');
+
+        function createStar() {
+            const star = document.createElement('div');
+            star.classList.add('star');
+
+            const startX = Math.random();
+            const size = Math.random();
+            const duration = 3 + Math.random() * 3;
+            const offsetX = Math.random() * 2 - 1;
+
+            star.style.setProperty('--start-x', startX);
+            star.style.setProperty('--size', size);
+            star.style.setProperty('--duration', duration);
+            star.style.setProperty('--offset-x', offsetX);
+
+            starsContainer.appendChild(star);
+
+            setTimeout(() => {
+                star.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(createStar, 200);
+    </script>
+</body>
+</html>
